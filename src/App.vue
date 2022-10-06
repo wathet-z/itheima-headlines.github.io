@@ -1,25 +1,48 @@
 <template>
   <div id="app">
-    <h1>黑马头条</h1>
-    <i class="toutiao toutiao-yanzhengma"></i>
-    <van-button type="primary">主要按钮</van-button>
-    <van-button type="info">信息按钮</van-button>
-    <van-button type="default">默认按钮</van-button>
-    <van-button type="warning">警告按钮</van-button>
-    <van-button type="danger">危险按钮</van-button>
-    <router-view />
+    <router-view/>
   </div>
 </template>
+
 <script>
+/*
+ 1. 在通过vscode开启项目时，一定要把更目录设置为项目文件夹 （如果不这样设置，可能自动格式化会失效）
+ 2. 虽然设置了通过eslint配置自动格式化插件，但是希望各位可以慢慢的脱离该插件
+*/
+
+/*
+  postcss-pxtorem 插件只能修改内部样式表、外部样式表中的px。
+  不可以修改行内样式表中的px设置
+
+  =>
+  一下内容只针对与距离相关(px)相关的样式
+  1.在移动端布局时，基本上使用内部样式、外部样式表来设置
+  2.当需要固定某个纵坐标高度时，可以使用行内样式  2222
+
+  设计稿上写的文字像素为66px，你就应该在代码里写66px， 但是设计稿的视口比正常页面视口大了1倍
+  所以，我们需要给 .postcssrc.js 中的转化比例配置设置为 原来的2倍
+*/
+
+/*
+  完成一个页面需求一般情况下会经历一下步骤
+  1. 通过阅读需求文档，创建出一个关于该页面的路由结构
+  2. 通过需求页面设计，制作静态页面
+  3. 规整页面中的基本的数据，以及一些非接口相关的要求或规则（先做与后端无关的逻辑）
+  4. 通过接口实现实际的业务内容 (再做鱼后端相关的逻辑)
+*/
 export default {
   name: 'App',
   data () {
     return {
+      name: 'lbw',
+      age: '111'
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-
+  .font-32 {
+    font-size: 66px;
+  }
 </style>
