@@ -1,6 +1,7 @@
 // 用户相关接口模块
 // 1. 导入全局axios配置中导出的请求方式
 import { request } from '../utils/request.js'
+// import store from 'store'
 
 // 2. 创建接口方法
 // @params 表示的请求参数 （必须要说明的项目）
@@ -26,4 +27,24 @@ export const login = data => request({
 export const getSmsCode = mobile => request({
   method: 'GET',
   url: `/v1_0/sms/codes/${mobile}`
+})
+
+/**
+ * 获取用户自己的信息
+ */
+export const getUserInfo = () => request({
+  method: 'GET',
+  url: '/v1_0/user'
+  // headers: {
+  //   // 在 请求接口时,有很多接口都是需要token作为请求头的参数
+  //   Authorization: `Bearer ${store.state.user.token}`
+  // }
+})
+
+/**
+ * 获取用户频道
+ */
+export const getUserChannels = () => request({
+  method: 'GET',
+  url: '/v1_0/user/channels'
 })

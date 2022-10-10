@@ -1,7 +1,12 @@
 <template>
   <div class="login-container">
     <!-- 导航栏 -->
-    <van-nav-bar class="nav-bar-page" title="登录" />
+    <van-nav-bar class="nav-bar-page" title="黑马头条 - 登录">
+      <template #left>
+        <!-- $router.back() 返回路由跳转的上一个页面 -->
+        <van-icon name="cross" @click="$router.back()" color="#fff"/>
+      </template>
+    </van-nav-bar>
 
     <!-- 登录表单 -->
     <van-form @submit="onSubmit" ref="loginForm">
@@ -128,7 +133,8 @@ export default {
         // this.$toast.clear()
         // 2. 通过开启其他的轻提示来主动关闭
         this.$toast.success('登录成功')
-        window.location = '/src/views/home/home.vue'
+        // 返回上一页
+        this.$router.back()
       } catch (error) {
         if (error.response.status === 400) this.$toast.fail('手机号或验证码输入错误')
         else this.$toast.fail('服务器内部错误，请稍后重试')

@@ -1,16 +1,16 @@
 <template>
   <div class="my-container">
     <!-- 已登录 -->
-    <div class="header user-info">
+    <div class="header user-info" v-if="this.$store.state.user.token">
       <!-- 基本信息 -->
       <div class="base-info">
         <div class="left">
           <van-image
             round
             class="avatar"
-            src="https://img01.yzcdn.cn/vant/cat.jpeg"
+            :src="userInfo.photo"
           />
-          <span>用户名称</span>
+          <span>{{userInfo.name}}</span>
         </div>
         <div class="right">
           <van-button type="default" round size="mini">编辑资料</van-button>
@@ -19,26 +19,26 @@
       <!-- 关注数据 -->
       <div class="data-stats">
         <div class="data-item">
-          <span class="count">0</span>
+          <span class="count">{{userInfo.art_count}}</span>
           <span>头条</span>
         </div>
         <div class="data-item">
-          <span class="count">0</span>
+          <span class="count">{{userInfo.follow_count}}</span>
           <span>关注</span>
         </div>
         <div class="data-item">
-          <span class="count">0</span>
+          <span class="count">{{userInfo.fans_count}}</span>
           <span>粉丝</span>
         </div>
         <div class="data-item">
-          <span class="count">0</span>
+          <span class="count">{{userInfo.like_count}}</span>
           <span>获赞</span>
         </div>
       </div>
     </div>
     <!-- 未登录 -->
-    <div class="header not-login">
-      <div class="login-btn">
+    <div class="header not-login" v-else>
+      <div class="login-btn" @click="$router.push('/login')">
         <img src="../../assets/mobile.png" alt="" />
         <span>登录 / 注册</span>
       </div>
@@ -54,20 +54,54 @@
     <van-cell title="消息通知" is-link class="mt-10" />
     <van-cell title="小智同学" is-link />
 
-    <van-cell title="退出登录" class="mt-10 login-out" @click="loginOutBtnFn"/>
+    <van-cell
+      title="退出登录"
+      class="mt-10 login-out" @click="loginOutBtnFn"
+      v-if="this.$store.state.user.token"
+    />
     <van-popup v-model="show">确定退出么</van-popup>
   </div>
 </template>
 
 <script>
+/*   2. 切换登录与未登录不同的状态
+    - 未登录时显示 登录注册按钮
+    - 以登录时显示 个人用户信息 退出登录按钮
+    - 当点击退出登录时，需要退出登录（删除vuex中的token数据）
+*/
+import { mapState } from 'vuex'
+import { getUserInfoAPI } from '../../api/index.js'
 export default {
   name: 'MyIndex',
   data () {
     return {
-      show: false
+      show: false,
+      userInfo: {}
     }
   },
+  computed: {
+    ...mapState(['user'])
+  },
+  created () {
+    this.loadUserInfo()
+    // 如何修改vuex中的user数据  -  this.$store.commit('setUser', 需要修改的内容)
+    // 如何获取vuex中的user数据  -  this.$store.state.user
+    console.log(this.$store.state.user)
+    // 第二章获取vuex中的数据
+    console.log(this.user)
+  },
   methods: {
+    // 获取用户登录个人信息
+    async loadUserInfo () {
+      try {
+        const { data: res } = await getUserInfoAPI()
+        this.userInfo = res.data
+        console.log(this.userInfo)
+      } catch (error) {
+        console.dir(error)
+      }
+    },
+    // 退出登录+
     loginOutBtnFn () {
       this.$dialog.confirm({
         title: '确认退出么',
@@ -76,7 +110,7 @@ export default {
         .then(() => {
           // on confirm
           // 确定
-          window.location = '#/login'
+          this.$store.commit('setUser', {})
           this.$toast.success('退出成功')
         })
         .catch(() => {

@@ -12,6 +12,13 @@ import 'vant/lib/index.css'
 // 引入自定义公共样式表
 import './styles/index.less'
 
+// 引入dayjs处理时间工具
+import './utils/dayjs.js'
+
+// 引入lodash工具
+import _ from 'lodash'
+Vue.prototype.$_ = _
+
 Vue.use(Vant)
 Vue.config.productionTip = false
 
